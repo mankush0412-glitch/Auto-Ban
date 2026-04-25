@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: guard-bot
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn bot:web_app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: OWNER_ID
+        sync: false
+      - key: MONGO_URI
+        sync: false
+      - key: RENDER_EXTERNAL_URL
+        fromService:
+          name: guard-bot
+          type: web
+          property: url
+      - key: PYTHON_VERSION
+        value: 3.11.0
